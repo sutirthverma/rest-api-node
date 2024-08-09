@@ -59,9 +59,13 @@ app.route('/api/user/:id')
 
 app.post('/api/user', (req, res) => {
     const body = req.body;
+    
+    if(!body || !body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title){
+        return res.status(400).json({message: 'All fields required'});
+    }
     users.push({...body, id: users.length + 1});
     fs.writeFile(dataFile, JSON.stringify(users), (err, data) => {
-        return res.json({status: 'Success', id: users.length});
+        return res.status(201).json({status: 'Success', id: users.length});
     })
     console.log(body);
 })
